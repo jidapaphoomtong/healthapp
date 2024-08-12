@@ -223,18 +223,6 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  List<IconData> icons = [
-    Icons.medical_information,
-    Icons.health_and_safety,
-    Icons.local_hospital,
-    Icons.bloodtype,
-    Icons.group,
-    Icons.support_agent
-  ];
-
-  List<String> titles = [
-    'Medical', 'Health and Safe', 'Hospital', 'Bloodtype', 'Group', 'Support'
-  ];
 
   final List<String> imgList = [
     'images/B1.jpg',
@@ -345,29 +333,96 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ),
             ),
-            GridView.builder(
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 3,
-              ),
-              itemCount: icons.length,
-              shrinkWrap: true,
-              physics: NeverScrollableScrollPhysics(),
-              itemBuilder: (context, index) {
-                return InkWell(
-                  onTap: () {},
-                  child: Container(
-                    margin: EdgeInsets.all(10),
-                    padding: EdgeInsets.symmetric(vertical: 15),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        Icon(icons[index]),
-                        Text(titles[index]),
-                      ],
+            // GridView.builder(
+            //   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+            //     crossAxisCount: 3,
+            //   ),
+            //   itemCount: icons.length,
+            //   shrinkWrap: true,
+            //   physics: NeverScrollableScrollPhysics(),
+            //   itemBuilder: (context, index) {
+            //     return InkWell(
+            //       onTap: () {},
+            //       child: Container(
+            //         margin: EdgeInsets.all(10),
+            //         padding: EdgeInsets.symmetric(vertical: 15),
+            //         child: Column(
+            //           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            //           children: [
+            //             Icon(icons[index]),
+            //             Text(titles[index]),
+            //           ],
+            //         ),
+            //       ),
+            //     );
+            //   },
+            // ),
+            Row(
+              children: [
+                SizedBox(width: 30,),
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    IconButton(
+                      onPressed: (){}, 
+                      icon: Icon(Icons.medical_information),
+                      iconSize: 40,
+                      color: Color.fromARGB(255, 14, 34, 149),
                     ),
-                  ),
-                );
-              },
+                    Text('Medical'),
+                    SizedBox(height: 18,),
+                    IconButton(
+                      onPressed: (){}, 
+                      icon: Icon( Icons.health_and_safety),
+                      iconSize: 40,
+                      color: Color.fromARGB(255, 14, 34, 149),
+                    ),
+                    Text('Health and Safety'),
+                  ],
+                ),
+                SizedBox(width: 40,),
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    IconButton(
+                      onPressed: (){}, 
+                      icon: Icon(Icons.home_work),
+                      iconSize: 40,
+                      color: Color.fromARGB(255, 14, 34, 149),
+                    ),
+                    Text('Hospital'),
+                    SizedBox(height: 18,),
+                     IconButton(
+                      onPressed: (){}, 
+                      icon: Icon(Icons.group),
+                      iconSize: 40,
+                      color: Color.fromARGB(255, 14, 34, 149),
+                    ),
+                    Text('Group'),
+                  ],
+                ),
+                SizedBox(width: 45,),
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    IconButton(
+                      onPressed: (){}, 
+                      icon: Icon(Icons.bloodtype),
+                      iconSize: 40,
+                      color: Color.fromARGB(255, 14, 34, 149),
+                    ),
+                    Text('Bloodtype'),
+                    SizedBox(height: 18,),
+                     IconButton(
+                      onPressed: (){}, 
+                      icon: Icon( Icons.support_agent),
+                      iconSize: 40,
+                      color: Color.fromARGB(255, 14, 34, 149),
+                    ),
+                    Text('Support'),
+                  ],
+                ),
+              ],
             ),
           ],
         ),

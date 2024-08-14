@@ -14,7 +14,7 @@ class _NavBarRootsState extends State<NavBarRoots> {
   final _screen = [
     HomeScreen(),
     // homescreen
-    DeshboardScreen(),
+    DashboardScreen(),
     // //history 
     HealthcareScreen(),
     // // information
@@ -44,7 +44,7 @@ class _NavBarRootsState extends State<NavBarRoots> {
           items: [
             BottomNavigationBarItem(icon: Icon(Icons.home_filled),
             label: "Home"),
-            BottomNavigationBarItem(icon: Icon(Icons.monitor_heart),
+            BottomNavigationBarItem(icon: Icon(Icons.dashboard_sharp),
             label: "Health Check"),
             BottomNavigationBarItem(icon: Icon(Icons.newspaper),
             label: "Health Care"),

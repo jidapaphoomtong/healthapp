@@ -14,7 +14,28 @@ class _HealthcareScreenState extends State<HealthcareScreen> {
  @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
-        child: Padding(
+        child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Manually adding the AppBar as a widget
+          Container(
+            padding: const EdgeInsets.only(top: 40.0, left: 16.0, right: 16.0, bottom: 16.0),
+            color: Theme.of(context).primaryColor,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  'Health Care',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ],
+            ),
+          ), 
+        Padding(
           padding: const EdgeInsets.all(12.0),
           child: 
           Column(
@@ -46,14 +67,14 @@ class _HealthcareScreenState extends State<HealthcareScreen> {
                                 height: 150,
                                 child: Padding(
                                   padding: const EdgeInsets.all(8.0),
-                                  // child: CachedNetworkImage(
-                                  //   imageUrl: menu.imageUrl,
-                                  //   placeholder: (context, url) =>
-                                  //       const Center(child: CircularProgressIndicator()),
-                                  //   errorWidget: (context, url, error) =>
-                                  //       const Icon(Icons.error),
-                                  //   fit: BoxFit.cover,
-                                  // ),
+                                  child: CachedNetworkImage(
+                                    imageUrl: menu.imageUrl,
+                                    placeholder: (context, url) =>
+                                        const Center(child: CircularProgressIndicator()),
+                                    errorWidget: (context, url, error) =>
+                                        const Icon(Icons.error),
+                                    fit: BoxFit.cover,
+                                  ),
                                 ),
                               ),
                             ),
@@ -84,8 +105,12 @@ class _HealthcareScreenState extends State<HealthcareScreen> {
                 : [const Center(child: Text('No menus available'))],
           ),
         ),
+        ]
+        )
       );
   }
+
+
   // List icon =[Icons.medical_information,Icons.health_and_safety,Icons.local_hospital, Icons.bloodtype,Icons.group,Icons.support_agent];
   // List title = ['Medical','Health and safe','Hospital','Bloodtype','Group','Support'];
 

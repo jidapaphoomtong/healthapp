@@ -23,14 +23,14 @@ class _MenuDetailScreenState extends State<MenuDetailScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // CachedNetworkImage(
-            //   imageUrl: widget.menu.imageUrl,
-            //   placeholder: (context, url) => const CircularProgressIndicator(),
-            //   errorWidget: (context, url, error) => const Icon(Icons.error),
-            //   width: double.infinity,
-            //   height: 200,
-            //   fit: BoxFit.cover,
-            // ),
+            CachedNetworkImage(
+              imageUrl: widget.menu.imageUrl,
+              placeholder: (context, url) => const CircularProgressIndicator(),
+              errorWidget: (context, url, error) => const Icon(Icons.error),
+              width: double.infinity,
+              height: 200,
+              fit: BoxFit.cover,
+            ),
             const SizedBox(height: 16),
             Text(
               widget.menu.title,

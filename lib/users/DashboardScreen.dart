@@ -89,105 +89,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
               ],
             ),
           ),
-//           Padding(
-//             padding: const EdgeInsets.all(16.0),
-//             child: GridView.builder(
-//               shrinkWrap: true,
-//               physics: const NeverScrollableScrollPhysics(), // Disable GridView's own scrolling
-//               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-//                 crossAxisCount: 2,
-//                 crossAxisSpacing: 16.0,
-//                 mainAxisSpacing: 16.0,
-//               ),
-//               itemCount: 6, // Number of items in the dashboard
-//               itemBuilder: (context, index) {
-//                 return DashboardCard(
-//                   icon: Icons.category, // Replace with appropriate icons
-//                   title: 'Feature ${index + 1}',
-//                   onTap: () {
-//                     // Handle navigation or action when tapped
-//                     Navigator.push(
-//                       context,
-//                       MaterialPageRoute(builder: (context) => FeatureScreen(index: index + 1)),
-//                     );
-//                   },
-//                 );
-//               },
-//             ),
-//           ),
-//         ],
-//       ),
-//     );
-//   }
-// }
-
-// class DashboardCard extends StatelessWidget {
-//   final IconData icon;
-//   final String title;
-//   final VoidCallback onTap;
-
-//   const DashboardCard({
-//     required this.icon,
-//     required this.title,
-//     required this.onTap,
-//   });
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return GestureDetector(
-//       onTap: onTap,
-//       child: Card(
-//         elevation: 4,
-//         shape: RoundedRectangleBorder(
-//           borderRadius: BorderRadius.circular(16),
-//         ),
-//         child: Padding(
-//           padding: const EdgeInsets.all(16.0),
-//           child: Column(
-//             mainAxisAlignment: MainAxisAlignment.center,
-//             children: [
-//               Icon(
-//                 icon,
-//                 size: 48,
-//                 color: Theme.of(context).primaryColor,
-//               ),
-//               const SizedBox(height: 16),
-//               Text(
-//                 title,
-//                 textAlign: TextAlign.center,
-//                 style: const TextStyle(
-//                   fontSize: 18,
-//                   fontWeight: FontWeight.bold,
-//                 ),
-//               ),
-//             ],
-//           ),
-//         ),
-//       ),
-//     );
-//   }
-// }
-
-// class FeatureScreen extends StatelessWidget {
-//   final int index;
-
-//   const FeatureScreen({super.key, required this.index});
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       appBar: AppBar(
-//         title: Text('Feature $index'),
-//       ),
-//       body: Center(
-//         child: Text(
-//           'Feature $index Details',
-//           style: const TextStyle(fontSize: 24),
-//         ),
-//       ),
-//     );
-//   }
-// }
 
  Container(
       height: MediaQuery.of(context).size.height * 0.11,
@@ -245,4 +146,29 @@ class _DashboardScreenState extends State<DashboardScreen> {
     );
   }
 }
+
+// class GraphModel {
+//   final double x;
+//   final double y;
+
+//   const GraphModel({required this.x, required this.y});
+// }
+
+// class BarGraphModel{
+//   final String label;
+//   final Color color;
+//   final List<GraphModel>graph;
+
+//   const BarGraphModel({});
+// }
+
+// class BarGraphData{
+//   final data = [
+//     const BarGraphModel(
+//       label : 'Pressure',
+//       color: 
+//       graph:[]
+//     ),
+//   ];
+// }
 

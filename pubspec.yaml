@@ -94,6 +94,7 @@ flutter:
   - images/B1.jpg
   - images/F1.jpg
   - images/P1.jpg
+  - images/bmi.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

@@ -28,30 +28,26 @@ class ScoreScreen extends StatelessWidget {
         centerTitle: true,
         title: const Text("BMI Score"),
       ),
-      body: Container(
-          padding: const EdgeInsets.all(12),
-          child: Card(
-              elevation: 12,
-              shape: const RoundedRectangleBorder(),
-              child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
+      body: Column(
+                  // mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    const Text(
-                      "Your Score",
-                      style: TextStyle(fontSize: 30, color: Colors.blue),
-                    ),
+                    // const Text(
+                    //   "คะแนนของคุณ",
+                    //   style: TextStyle(fontSize: 30, color: Colors.blue),
+                    // ),
                     const SizedBox(
-                      height: 10,
+                      height: 20,
                     ),
                     PrettyGauge(
                       gaugeSize: 300,
                       minValue: 0,
                       maxValue: 40,
                       segments: [
-                        GaugeSegment('UnderWeight', 18.5, Colors.red),
+                        GaugeSegment('UnderWeight', 18.5, Color.fromARGB(255, 166, 229, 168)),
                         GaugeSegment('Normal', 6.4, Colors.green),
-                        GaugeSegment('OverWeight', 5, Colors.orange),
-                        GaugeSegment('Obese', 10.1, Colors.pink),
+                        GaugeSegment('OverWeight', 5, Colors.yellow),
+                        GaugeSegment('fat', 5, Colors.orange),
+                        GaugeSegment('Obese', 5.1, Colors.red),
                       ],
                       valueWidget: Text(
                         bmiScore.toStringAsFixed(1),
@@ -70,12 +66,15 @@ class ScoreScreen extends StatelessWidget {
                     const SizedBox(
                       height: 10,
                     ),
-                    Text(
-                      bmiInterpretation!,
-                      style: const TextStyle(fontSize: 15),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 30),
+                      child: Text(
+                        bmiInterpretation!,
+                        style: const TextStyle(fontSize: 15,),
+                      ),
                     ),
                     const SizedBox(
-                      height: 10,
+                      height: 20,
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -84,7 +83,7 @@ class ScoreScreen extends StatelessWidget {
                             onPressed: () {
                               Navigator.pop(context);
                             },
-                            child: const Text("Re-calculate")),
+                            child: const Text("ประเมินอีกครั้ง")),
                         const SizedBox(
                           width: 10,
                         ),
@@ -156,7 +155,7 @@ class ScoreScreen extends StatelessWidget {
       );
     }
   },
-  child: const Text("Save Data"),
+  child: const Text("บันทึกข้อมูล"),
 ),
                         const SizedBox(
                           width: 10,
@@ -169,27 +168,32 @@ class ScoreScreen extends StatelessWidget {
                         //     child: const Text("Share")),
                       ],
                     )
-                  ]))),
-    );
+                  ]
+                )
+              );
   }
 
   void setBmiInterpretation() {
     if (bmiScore > 30) {
-      bmiStatus = "Obese";
-      bmiInterpretation = "Please work to reduce obesity";
-      bmiStatusColor = Colors.pink;
+      bmiStatus = "น้ำหนักอยู่ในเกณฑ์อ้วนมาก";
+      bmiInterpretation = "ควรเข้าปรึกษาแพทย์เพื่อรับยาในการควบคุมปริมาณน้ำตาลในเลือด พร้อมปรับเปลี่ยนพฤติกรรมการรับประทานอาหารที่ดีต่อสุขภาพ \n ไม่รับประทานอาหารที่เพิ่มมวลไขมันแก่ร่างกาย และหมั่นออกกำลังกายเป็นกิจวัตรประจำวันอย่างสม่ำเสมอ พักผ่อนให้เพียงพอ \n และดื่มน้ำอย่างต่ำ 10-12 แก้วต่อวัน และติดตามผล BMI ตลอดในช่วงควบคุมน้ำหนักอยู่เสมอ";
+      bmiStatusColor = Colors.red;
     } else if (bmiScore >= 25) {
-      bmiStatus = "Overweight";
-      bmiInterpretation = "Do regular exercise & reduce the weight";
+      bmiStatus = "น้ำหนักอยู่ในเกณฑ์อ้วน";
+      bmiInterpretation = "ควรควบคุมปริมาณไขมันในร่างกายตัวเองแบบเร่งด่วน ทานอาหารที่มีประโยชน์ ออกกำลังกายอย่างสม่ำเสมอ \n ดื่มน้ำให้เพียงพอต่อร่างกาย การพักผ่อนให้เพียงพอ และติดตามผล BMI ตลอดในช่วงควบคุมน้ำหนักอยู่เสมอ";
       bmiStatusColor = Colors.orange;
-    } else if (bmiScore >= 18.5) {
-      bmiStatus = "Normal";
-      bmiInterpretation = "Enjoy, You are fit";
+    } else if(bmiScore >= 23.0){
+      bmiStatus = "น้ำหนักเกินมาตรฐาน";
+      bmiInterpretation = "เลือกทานอาหารที่มีโปรตีนสูง ออกกำลังกาย และพักผ่อนให้เพียงพอ \n เพื่อลดระดับไขมันให้กลับมาอยู่ในเกณฑ์มาตรฐาน";
+      bmiStatusColor = Colors.yellow;
+    }else if (bmiScore >= 18.5) {
+      bmiStatus = "น้ำหนักสมส่วน";
+      bmiInterpretation = "รับประทานอาหารที่มีประโยชน์ และออกกำลังกายอย่างสม่ำเสมอเพื่อคงความสมดุล";
       bmiStatusColor = Colors.green;
     } else if (bmiScore < 18.5) {
-      bmiStatus = "Underweight";
-      bmiInterpretation = "Try to increase the weight";
-      bmiStatusColor = Colors.red;
+      bmiStatus = "น้ำหนักต่ำกว่าเกณฑ์";
+      bmiInterpretation = "ออกกำลังกายควบคู่กับการรับประทานอาหารที่มีส่วนประกอบโปรตีนสูง \n ช่วยทำให้กล้ามเนื้อแข็งแรงและมีสารอาหารมากพอไปซ่อมแซมการทำงานของอวัยวะภายในได้อย่างเพียงพอ";
+      bmiStatusColor =Color.fromARGB(255, 166, 229, 168);
     }
   }
 }

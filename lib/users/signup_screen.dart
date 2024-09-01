@@ -228,7 +228,7 @@ class _SignUpScreenState extends State<SignUpScreen>{
                   SizedBox(
                     width: MediaQuery.of(context).size.width,
                     height: 265,
-                    child: Image.asset('images/health_check.jpg'),
+                    child: Image.asset('images/logo1.png'),
                   ),
                   //LoginSceen Sign-in form
                   Padding(

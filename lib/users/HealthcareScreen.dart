@@ -20,9 +20,9 @@ class _HealthcareScreenState extends State<HealthcareScreen> {
           // Manually adding the AppBar as a widget
           Container(
             padding: const EdgeInsets.only(top: 40.0, left: 16.0, right: 16.0, bottom: 16.0),
-            color: Theme.of(context).primaryColor,
+            color: Colors.blue,
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
                   'Health Care',

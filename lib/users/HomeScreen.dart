@@ -1,221 +1,13 @@
-// import 'dart:convert';
-
-// import 'package:carousel_slider/carousel_slider.dart';
-// import 'package:flutter/material.dart';
-// import 'package:health/healthcheck/BMI.dart';
-// import 'package:health/healthcheck/Diabetes.dart';
-// import 'package:health/healthcheck/Pressure.dart';
-// import 'package:http/http.dart' as http;
-
-
-// class HomeScreen extends StatefulWidget{
-//   @override
-//   State<HomeScreen> createState() => _HomeScreenState();
-// }
-
-// class _HomeScreenState extends State<HomeScreen> {
-//   List icon =[Icons.medical_information,
-//               Icons.health_and_safety,
-//               Icons.local_hospital, 
-//               Icons.bloodtype,
-//               Icons.group,
-//               Icons.support_agent];
-
-//   List title = ['Medical','Health and safe','Hospital','Bloodtype','Group','Support'];
-
-//    final List<String> imgList = [
-//     'https://via.placeholder.com/600x400.png?text=Image+1',
-//     'https://via.placeholder.com/600x400.png?text=Image+2',
-//     'https://via.placeholder.com/600x400.png?text=Image+3',
-//   ];
-
-
-//   String name = '';
-
-//   Future<void> fetchName() async {
-//     String url = "http://10.160.40.13/myapp/get_name.php?user_id=1"; // Update user_id as needed
-//     try {
-//       var res = await http.get(Uri.parse(url));
-//       var response = jsonDecode(res.body);
-//       if (response['success'] == true) {
-//         setState(() {
-//           name = response['name'];
-//         });
-//       } else {
-//         print("Error: ${response['message']}");
-//       }
-//     } catch (e) {
-//       print("Exception: $e");
-//     }
-//   }
-
-//   @override
-//   void initState() {
-//     super.initState();
-//     fetchName();
-//   }
-
-//   @override
-//   Widget build(BuildContext context){
-//     return SingleChildScrollView(
-//       padding: EdgeInsets.only(top: 40),
-//       child: Column(
-//         crossAxisAlignment: CrossAxisAlignment.start,
-//         children: [
-//           Padding(padding: EdgeInsets.symmetric(horizontal: 15),
-//           child: Row(
-//             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-//             children: [
-//               Text("Hello $name", 
-//               style: TextStyle(
-//                 fontSize: 35,
-//                 fontWeight: FontWeight.w500,
-//               ) ,),
-//           //     SizedBox( height: 15,),
-//           //     CarouselSlider(
-//           // options: CarouselOptions(
-//           //   height: 400.0,
-//           //   enlargeCenterPage: true,
-//           //   autoPlay: true,
-//           //   aspectRatio: 16 / 9,
-//           //   autoPlayCurve: Curves.fastOutSlowIn,
-//           //   enableInfiniteScroll: true,
-//           //   autoPlayAnimationDuration: Duration(milliseconds: 800),
-//           //   viewportFraction: 0.8,
-//           // ),
-//           // items: imgList.map((item) => Container(
-//           //   child: Center(
-//           //     child: Image.network(item, fit: BoxFit.cover, width: 1000),
-//           //   ),
-//           // )).toList()),
-//               ],
-//           ),
-//           ),
-//           SizedBox(height: 30,),
-//           Padding(
-//             padding: EdgeInsets.only(left: 15),
-//             child: Text('Do you want to check your health?',
-//             style: TextStyle(
-//               fontSize: 23,
-//               fontWeight: FontWeight.w500,
-//               color: Colors.black54,
-//             ),),
-//             ),
-//           SizedBox(height: 20),
-//           Column(
-//             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-//             children: [Material(
-//           color: Color.fromARGB(255, 4, 73, 192),
-//           borderRadius: BorderRadius.circular(10),
-//           child: InkWell(
-//             onTap: (){
-//               Navigator.push(context, MaterialPageRoute(
-//                 builder: (context)=>ShowdataPopup()
-//               ));
-//             },
-//             child: Padding(
-//               padding: EdgeInsets.symmetric(vertical: 15,horizontal: 40),
-//               child : Center (child: Text("Pressure",
-//               style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold),),
-//             ),
-//           ),
-//           ),
-//         ),
-//         SizedBox(height: 10),
-//         Material(
-//           color: Color.fromARGB(255, 4, 73, 192),
-//           borderRadius: BorderRadius.circular(10),
-//           child: InkWell(
-//             onTap: (){
-//               Navigator.push(context, MaterialPageRoute(
-//                 builder: (context)=>BMIScreen()
-//               ));
-//             },
-//             child: Padding(
-//               padding: EdgeInsets.symmetric(vertical: 15,horizontal: 40),
-//               child : Center (child: Text("BMI",
-//               style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold),),
-//             ),
-//           ),
-//           ),
-//         ),
-//         SizedBox(height: 10),
-//         Material(
-//           color: Color.fromARGB(255, 4, 73, 192),
-//           borderRadius: BorderRadius.circular(10),
-//           child: InkWell(
-//             onTap: (){
-//               Navigator.push(context, MaterialPageRoute(
-//                 builder: (context)=>DiabetesScreen()
-//               ));
-//             },
-//             child: Padding(
-//               padding: EdgeInsets.symmetric(vertical: 15,horizontal: 40),
-//               child : Center (child: Text("Diabetes",
-//               style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold),),
-//             ),
-//           ),
-//           ),
-//         ),
-//         ],
-//         ),
-//         SizedBox(height: 15),
-//         Padding(padding: EdgeInsets.only(left: 15),
-//         child: Text('Other',
-//         style: TextStyle(
-//           fontSize: 20,
-//           fontWeight: FontWeight.w500,
-//               color: Colors.black54,
-//         ),),
-//         ),
-//         GridView.builder(
-//           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-//             crossAxisCount: 3),
-//             itemCount: icon.length,
-//             shrinkWrap: true,
-//             physics: NeverScrollableScrollPhysics(), 
-//             itemBuilder: (context, index){
-//               return InkWell(
-//                 onTap: (){},
-//                 child: Container(
-//                   margin: EdgeInsets.all(10),
-//                   padding: EdgeInsets.symmetric(vertical: 15),
-//                   // decoration: BoxDecoration(
-//                   //   boxShadow: [
-//                   //     BoxShadow(
-//                   //       color:Colors.black12,
-//                   //       blurRadius: 4,
-//                   //       spreadRadius: 2, 
-//                   //     ),
-//                   //   ],
-//                   // ),
-//                   child: Column(
-//                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-//                     children: [
-//                       Icon(icon[index]),
-//                       Text(title[index],
-//                       // style:TextStyle(
-//                       //   fontSize: 18),
-//                       ),
-//                     ],
-//                   ),
-//                 ),
-//               );
-//             },
-//           ),
-//         ],
-//       ),
-//     );
-//   }
-// }
-
 import 'dart:convert';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:health/healthcheck/BMI.dart';
 import 'package:health/healthcheck/Diabetes.dart';
 import 'package:health/healthcheck/Pressure.dart';
 import 'package:http/http.dart' as http;
+import 'package:humanitarian_icons/humanitarian_icons.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -229,6 +21,19 @@ class _HomeScreenState extends State<HomeScreen> {
     'images/P1.jpg',
     'images/F1.jpg',
   ];
+
+  final hospital = 'https://med.msu.ac.th/suddhavej/';
+  final medicien = 'https://www.facebook.com/UniPharmMSU';
+  final healthS = 'https://www.thaihealth.or.th/category/%E0%B8%82%E0%B9%88%E0%B8%B2%E0%B8%A7%E0%B8%AA%E0%B8%A3%E0%B9%89%E0%B8%B2%E0%B8%87%E0%B8%AA%E0%B8%B8%E0%B8%82/%E0%B8%82%E0%B9%88%E0%B8%B2%E0%B8%A7%E0%B8%AA%E0%B8%B8%E0%B8%82%E0%B8%A0%E0%B8%B2%E0%B8%9E/';
+  final group = 'https://www.facebook.com/profile.php?id=100063732813635';
+  final emergency = 'https://www.facebook.com/rcpmsu';
+  
+  Future<void> _launchURL(String url) async {
+    final Uri uri = Uri.parse(url);
+    if (!await launchUrl(uri)) {
+      throw 'Could not launch $url';
+    }
+  }
 
   String name = '';
 
@@ -269,14 +74,15 @@ class _HomeScreenState extends State<HomeScreen> {
                 // mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    "Hello Michel",
+                    "Hello Tester",
                     style: TextStyle(
                       fontSize: 30,
                       fontWeight: FontWeight.w500,
                     ),
                   ),
-                  SizedBox(width: 10,),
-                  Image.asset('images/4042356.png',width: 35,)
+                  // SizedBox(width: 10,),
+                  // Image.asset('images/4042356.png',width: 35,)
+                  // Icon(Icons.circle, weight: 35,),
                 ],
               ),
             ),
@@ -333,30 +139,6 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ),
             ),
-            // GridView.builder(
-            //   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-            //     crossAxisCount: 3,
-            //   ),
-            //   itemCount: icons.length,
-            //   shrinkWrap: true,
-            //   physics: NeverScrollableScrollPhysics(),
-            //   itemBuilder: (context, index) {
-            //     return InkWell(
-            //       onTap: () {},
-            //       child: Container(
-            //         margin: EdgeInsets.all(10),
-            //         padding: EdgeInsets.symmetric(vertical: 15),
-            //         child: Column(
-            //           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            //           children: [
-            //             Icon(icons[index]),
-            //             Text(titles[index]),
-            //           ],
-            //         ),
-            //       ),
-            //     );
-            //   },
-            // ),
             Row(
               children: [
                 SizedBox(width: 30,),
@@ -364,7 +146,9 @@ class _HomeScreenState extends State<HomeScreen> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     IconButton(
-                      onPressed: (){}, 
+                      onPressed: (){
+                        _launchURL(medicien);
+                      }, 
                       icon: Icon(Icons.medical_information),
                       iconSize: 40,
                       color: Color.fromARGB(255, 14, 34, 149),
@@ -372,7 +156,9 @@ class _HomeScreenState extends State<HomeScreen> {
                     Text('Medical'),
                     SizedBox(height: 18,),
                     IconButton(
-                      onPressed: (){}, 
+                      onPressed: (){
+                         _launchURL(healthS);
+                      }, 
                       icon: Icon( Icons.health_and_safety),
                       iconSize: 40,
                       color: Color.fromARGB(255, 14, 34, 149),
@@ -385,7 +171,9 @@ class _HomeScreenState extends State<HomeScreen> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     IconButton(
-                      onPressed: (){}, 
+                      onPressed: (){
+                         _launchURL(hospital);
+                      }, 
                       icon: Icon(Icons.home_work),
                       iconSize: 40,
                       color: Color.fromARGB(255, 14, 34, 149),
@@ -393,7 +181,9 @@ class _HomeScreenState extends State<HomeScreen> {
                     Text('Hospital'),
                     SizedBox(height: 18,),
                      IconButton(
-                      onPressed: (){}, 
+                      onPressed: (){
+                         _launchURL(group);
+                      }, 
                       icon: Icon(Icons.group),
                       iconSize: 40,
                       color: Color.fromARGB(255, 14, 34, 149),
@@ -406,15 +196,23 @@ class _HomeScreenState extends State<HomeScreen> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     IconButton(
-                      onPressed: (){}, 
-                      icon: Icon(Icons.bloodtype),
+                      onPressed: (){
+                        _launchURL(emergency);
+                      }, 
+                      icon: Icon(IconData(0xE9A7,
+  fontFamily: 'HumanitarianIcons',
+  fontPackage: 'humanitarian_icons',
+),
+),
                       iconSize: 40,
                       color: Color.fromARGB(255, 14, 34, 149),
                     ),
-                    Text('Bloodtype'),
+                    Text('Emergency'),
                     SizedBox(height: 18,),
                      IconButton(
-                      onPressed: (){}, 
+                      onPressed: (){
+                        // Navigator.of(context).pop();
+                      },
                       icon: Icon( Icons.support_agent),
                       iconSize: 40,
                       color: Color.fromARGB(255, 14, 34, 149),

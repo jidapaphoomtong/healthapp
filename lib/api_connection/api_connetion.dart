@@ -1,6 +1,6 @@
 class API
 {
-  static const hostconnect = "http://172.20.10.5/myapp";
+  static const hostconnect = "http://192.168.1.20/myapp";
 
   //signup users
   // static const validateEmail = "$hostconnect/users/validate_email.php";

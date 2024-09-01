@@ -45,7 +45,7 @@ class _NavBarRootsState extends State<NavBarRoots> {
             BottomNavigationBarItem(icon: Icon(Icons.home_filled),
             label: "Home"),
             BottomNavigationBarItem(icon: Icon(Icons.dashboard_sharp),
-            label: "Health Check"),
+            label: "Dashboard"),
             BottomNavigationBarItem(icon: Icon(Icons.newspaper),
             label: "Health Care"),
             BottomNavigationBarItem(icon: Icon(Icons.settings),

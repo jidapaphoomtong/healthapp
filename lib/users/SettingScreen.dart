@@ -14,13 +14,35 @@ class _SettingScreenState extends State<SettingScreen> {
     return Scaffold(
       body:  SafeArea(
         child: ListView(
-          padding: EdgeInsets.all(24),
           children: [
-            // ElevatedButton.icon(
-            //   onPressed: (){}, 
-            //   icon: Icon(Icons.arrow_back), 
-            //   label: Text('Setting')),
-            Center(child: Text('Setting', style: TextStyle(fontSize: 22,fontWeight: FontWeight.bold))),
+            Container(
+            padding: const EdgeInsets.only(top: 18.0, left: 16.0, right: 16.0, bottom: 16.0),
+            color: Colors.blue,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  'Setting',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ],
+            ),
+          ), 
+          SizedBox(height: 8,),
+            Column(
+              children: [
+                Image.asset('images/old.jpg', scale: 10),
+                SizedBox(height: 8,),
+                Text('Tester Test',
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.w500,),)
+              ],
+            ),
             SettingsGroup(
               title: 'GENERAL', 
               children: <Widget>[
@@ -30,7 +52,7 @@ class _SettingScreenState extends State<SettingScreen> {
                 builDeleteAccount(context),
               ]
             ),
-            SizedBox(height: 32,),
+            // SizedBox(height: 32,),
             SettingsGroup(
               title: 'FEEDBACK', 
               children: <Widget>[
@@ -56,6 +78,8 @@ class _SettingScreenState extends State<SettingScreen> {
     },
     );
   }
+
+
   Widget builDeleteAccount(context){
     return SimpleSettingsTile(title: 'Delete Account',
     subtitle: '',

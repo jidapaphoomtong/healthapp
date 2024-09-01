@@ -51,7 +51,9 @@ dependencies:
   image_picker: ^1.1.2
   cached_network_image: ^3.3.1
   carousel_slider: ^4.0.0
-
+  icons_launcher: ^2.1.7
+  humanitarian_icons: ^1.0.2
+  url_launcher: ^6.3.0
 
 
 dev_dependencies:
@@ -88,14 +90,17 @@ flutter:
   - images/4042422.png
   - images/hypertension-01.png
   - images/1794749.png
-  # - images/11111.png
-  # - images/22222.jpg
+  - images/bmi1.jpg
+  - images/old.jpg
   - images/dibetes.jpg
   - images/B1.jpg
   - images/F1.jpg
   - images/P1.jpg
   - images/bmi.png
-
+  - images/logo1.png
+  - images/pressure.jpg
+  - images/crop.jpg
+  
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
 

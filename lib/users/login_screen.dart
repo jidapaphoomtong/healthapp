@@ -5,11 +5,9 @@ import 'package:get/get.dart';
 import 'package:health/admins/alogin.dart';
 import 'package:health/admins/asignup.dart';
 import 'package:health/api_connection/api_connetion.dart';
-// import 'package:health/api_connection/api_connetion.dart';
-// import 'package:health/users/model/user.dart';
 import 'package:health/users/signup_screen.dart';
-// import 'package:health/users/uerPreferences/user_preferences.dart';
 import 'package:health/widget/navbar.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
 class LoginScreen extends StatefulWidget{
@@ -27,61 +25,60 @@ class _LoginScreenState extends State<LoginScreen>{
   var isObsecure = true.obs;
 
 
-   Future<void> Login() async {
+  Future<void> Login() async {
   if (email.text != "" && password.text != "") {
     try {
-      // Update this IP address to your computer's local network IP if needed
-      // String url = "http://10.160.40.13/myapp/login.php";
-      var res = await http.post(Uri.parse(API.login),
-        body: {
-          "email": email.text,
-          "password": password.text
-        }
-      );
+      // ส่งคำขอ POST ไปที่ API การล็อกอิน
+      var res = await http.post(Uri.parse(API.login), body: {
+        "email": email.text,
+        "password": password.text,
+      });
+
+      // ตรวจสอบสถานะการตอบสนอง
+      print("Response status: ${res.statusCode}");
+      print("Response body: ${res.body}");
+
+      // ถอดรหัสการตอบกลับ
       var response = jsonDecode(res.body);
       if (response["success"] == true) {
-        Navigator.push(context, MaterialPageRoute(builder: (context) => NavBarRoots()));
-      } else {
-        await showDialog(
-          context: context,
-          builder: (BuildContext context) {
-            return AlertDialog(
-              title: Center(child: Text("ไม่สามารถเข้าสู่ระบบได้ \nโปรดตรวจสอบรหัสหรืออีเมล",
-              style: TextStyle(fontSize: 18),)),
-              actions: [
-                TextButton(
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                  child: Text('OK',style: TextStyle(fontSize: 16),),
-                ),
-              ],
-            );
-          },
+        // บันทึก user_id ลงใน SharedPreferences
+        SharedPreferences prefs = await SharedPreferences.getInstance();
+        prefs.setString('user_id', response["user"]["id"].toString());
+
+        // นำทางไปที่หน้า NavBarRoots
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => NavBarRoots(role: 'user')),
         );
+      } else {
+        _showErrorDialog("Can not Log in \nPlease check your email or password");
       }
     } catch (e) {
       print(e);
+      _showErrorDialog("Error, Please try again");
     }
   } else {
-   await showDialog(
-          context: context,
-          builder: (BuildContext context) {
-            return AlertDialog(
-              title: Center(child: Text("กรุณากรอกข้อมูลให้ครบถ้วน",
-              style: TextStyle(fontSize: 18),)),
-              actions: [
-                TextButton(
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                  child: Text('OK',style: TextStyle(fontSize: 16),),
-                ),
-              ],
-            );
-          },
-        );
+    _showErrorDialog("Please fill in all information completely");
   }
+}
+
+void _showErrorDialog(String message) {
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: Center(child: Text(message, style: TextStyle(fontSize: 18))),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            child: Text('OK', style: TextStyle(fontSize: 16)),
+          ),
+        ],
+      );
+    },
+  );
 }
 
   @override
@@ -106,7 +103,7 @@ class _LoginScreenState extends State<LoginScreen>{
                     onPressed: () {
                       Navigator.push(
                         context, MaterialPageRoute(
-                          builder: (context) => NavBarRoots()));
+                          builder: (context) => NavBarRoots(role: 'user')));
                     },
                     child: Text(
                       'SKIP',

@@ -83,7 +83,7 @@ class ScoreScreen extends StatelessWidget {
                             onPressed: () {
                               Navigator.pop(context);
                             },
-                            child: const Text("ประเมินอีกครั้ง")),
+                            child: const Text("Re-calculate")),
                         const SizedBox(
                           width: 10,
                         ),
@@ -104,7 +104,7 @@ class ScoreScreen extends StatelessWidget {
           context: context,
           builder: (BuildContext context) {
             return AlertDialog(
-              title: Center(child: Text("บันทึกข้อมูลสำเร็จ")),
+              title: Center(child: Text("Save complete")),
               actions: [
                 TextButton(
                   onPressed: () {
@@ -121,7 +121,7 @@ class ScoreScreen extends StatelessWidget {
           context: context,
           builder: (BuildContext context) {
             return AlertDialog(
-              title: Center(child: Text("พบข้อผิดพลาด")),
+              title: Center(child: Text("Error")),
               content: Text(response["message"]),
               actions: [
                 TextButton(
@@ -140,7 +140,7 @@ class ScoreScreen extends StatelessWidget {
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
-            title: Center(child: Text("พบข้อผิดพลาด")),
+            title: Center(child: Text("Error")),
             content: Text(e.toString()),
             actions: [
               TextButton(
@@ -155,7 +155,7 @@ class ScoreScreen extends StatelessWidget {
       );
     }
   },
-  child: const Text("บันทึกข้อมูล"),
+  child: const Text("Save"),
 ),
                         const SizedBox(
                           width: 10,

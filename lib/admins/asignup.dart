@@ -1,13 +1,9 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:health/admins/alogin.dart';
 import 'package:health/api_connection/api_connetion.dart';
-import 'package:health/users/login_screen.dart';
-import 'package:health/users/model/user.dart';
-import 'package:health/widget/navbar.dart';
 import 'package:http/http.dart' as http;
 
 class AdminScreen extends StatefulWidget{
@@ -50,7 +46,7 @@ class _AdminScreenState extends State<AdminScreen>{
           context: context,
           builder: (BuildContext context) {
             return AlertDialog(
-              title: Center(child: Text("บันทึกข้อมูลสำเร็จ")),
+              title: Center(child: Text("Save complete")),
               actions: [
                 TextButton(
                   onPressed: () {
@@ -68,7 +64,7 @@ class _AdminScreenState extends State<AdminScreen>{
         email.clear();
         password.clear();
       } else {
-        print("พบข้อผิดพลาด: ${response["message"]}");
+        print("Error: ${response["message"]}");
       }
     } catch (e) {
       print(e);
@@ -78,7 +74,7 @@ class _AdminScreenState extends State<AdminScreen>{
           context: context,
           builder: (BuildContext context) {
             return AlertDialog(
-              title: Center(child: Text("กรุณากรอกข้อมูลให้ครบถ้วน")),
+              title: Center(child: Text("Please fill in all information completely")),
               actions: [
                 TextButton(
                   onPressed: () {

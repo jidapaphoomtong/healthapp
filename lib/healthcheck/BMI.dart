@@ -193,6 +193,9 @@ class _BMIScreenState extends State<BMIScreen> {
       setState(() {
         _bmiScore = weight / pow(height / 100, 2);
       });
+
+      _heightController.clear();
+      _weightController.clear();
     } else {
       _showSnackBar("Please enter valid height and weight.");
     }
@@ -235,7 +238,7 @@ class _BMIScreenState extends State<BMIScreen> {
               child: TextFormField(
                 controller: _heightController,
                 decoration: InputDecoration(
-                  labelText: 'ความสูง (เซนติเมตร)',
+                  labelText: 'Hight(CM.)',
                   border: OutlineInputBorder(),
                 ),
                 keyboardType: TextInputType.number,
@@ -244,26 +247,26 @@ class _BMIScreenState extends State<BMIScreen> {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
+                // Expanded(
+                //   child: Padding(
+                //     padding: const EdgeInsets.all(8.0),
+                //     child: TextFormField(
+                //       controller: _ageController,
+                //       decoration: InputDecoration(
+                //         labelText: 'Age',
+                //         border: OutlineInputBorder(),
+                //       ),
+                //       keyboardType: TextInputType.number,
+                //     ),
+                //   ),
+                // ),
                 Expanded(
                   child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: TextFormField(
-                      controller: _ageController,
-                      decoration: InputDecoration(
-                        labelText: 'อายุ',
-                        border: OutlineInputBorder(),
-                      ),
-                      keyboardType: TextInputType.number,
-                    ),
-                  ),
-                ),
-                Expanded(
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
+                    padding: const EdgeInsets.all(20.0),
                     child: TextFormField(
                       controller: _weightController,
                       decoration: InputDecoration(
-                        labelText: 'น้ำหนัก (กิโลกรัม)',
+                        labelText: 'Weight(KG.)',
                         border: OutlineInputBorder(),
                       ),
                       keyboardType: TextInputType.number,
@@ -311,7 +314,7 @@ class _BMIScreenState extends State<BMIScreen> {
                   Icons.arrow_forward_ios_rounded,
                   color: Colors.black,
                 ),
-                buttonText: "ประเมินสุขภาพ",
+                buttonText: "Calculate",
               ),
             ),
           ],
@@ -425,7 +428,7 @@ class _GenderWidgetState extends State<GenderWidget> {
                   const SizedBox(
                     height: 5,
                   ),
-                  const Text("เพศชาย")
+                  const Text("Man")
                 ],
               )),
           const SizedBox(
@@ -451,7 +454,7 @@ class _GenderWidgetState extends State<GenderWidget> {
                   const SizedBox(
                     height: 5,
                   ),
-                  const Text("เพศหญิง")
+                  const Text("Women")
                 ],
               ))
         ],

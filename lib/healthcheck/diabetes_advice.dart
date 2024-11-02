@@ -13,29 +13,6 @@ class DiabetesAdvScreen extends StatelessWidget {
     required this.Dcond,
   });
 
-  Future<void> _saveDiabetesData() async {
-    try {
-      var response = await http.post(
-        Uri.parse(API.diabetes),
-        headers: <String, String>{
-          'Content-Type': 'application/json; charset=UTF-8',
-        },
-        body: jsonEncode(<String, dynamic>{
-          'fpg': fpg.toString(), // Fixed typo here
-          'cond': Dcond,
-        }),
-      );
-      if (response.statusCode == 200) {
-        print('Data saved successfully');
-      } else {
-        print('Failed to save data. Status code: ${response.statusCode}');
-        print('Response body: ${response.body}'); // Log response body for debugging
-      }
-    } catch (e) {
-      print('Error saving data: $e');
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -74,16 +51,123 @@ class DiabetesAdvScreen extends StatelessWidget {
                       onPressed: () {
                         Navigator.pop(context);
                       },
-                      child: const Text("ประเมินผลอีกครั้ง"),
+                      child: const Text("Re-calculate"),
                     ),
                     const SizedBox(width: 20),
-                    ElevatedButton(
-                      onPressed: () async {
-                        await _saveDiabetesData(); // Await the save operation
-                        Navigator.pop(context);
-                      },
-                      child: const Text("บันทึกข้อมูล"),
-                    ),
+                   ElevatedButton(
+  onPressed: () async {
+  try {
+    var res = await http.post(
+      Uri.parse(API.diabetes),
+      body: {
+        'fpg': fpg.toString(),
+        'Dcond': Dcond,
+      },
+    );
+
+    if (res.statusCode == 200) {  // Check for successful response
+      try {
+        var response = jsonDecode(res.body);
+        if (response["success"] == true) {
+          await showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return AlertDialog(
+                title: Center(child: Text("Save complete")),
+                actions: [
+                  TextButton(
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                    child: Text('OK', style: TextStyle(fontSize: 16)),
+                  ),
+                ],
+              );
+            },
+          );
+        } else {
+          await showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return AlertDialog(
+                title: Center(child: Text("Error")),
+                content: Text(response["message"]),
+                actions: [
+                  TextButton(
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                    child: Text('OK', style: TextStyle(fontSize: 16)),
+                  ),
+                ],
+              );
+            },
+          );
+        }
+      } catch (e) {
+        // JSON decoding failed, handle the error
+        await showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: Center(child: Text("Error")),
+              content: Text("Invalid JSON response: ${res.body}"),
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: Text('OK', style: TextStyle(fontSize: 16)),
+                ),
+              ],
+            );
+          },
+        );
+      }
+    } else {
+      // Server returned a non-200 status code
+      await showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Center(child: Text("Error")),
+            content: Text("Server error: ${res.statusCode}"),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: Text('OK', style: TextStyle(fontSize: 16)),
+              ),
+            ],
+          );
+        },
+      );
+    }
+  } catch (e) {
+    // Network or other error occurred
+    await showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Center(child: Text("Error")),
+          content: Text(e.toString()),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text('OK', style: TextStyle(fontSize: 16)),
+            ),
+          ],
+        );
+      },
+    );
+  }
+},
+
+  child: const Text("Save"),
+),
                   ],
                 ),
               ),
@@ -94,71 +178,3 @@ class DiabetesAdvScreen extends StatelessWidget {
     );
   }
 }
-
-
-// void _showDiabetes(String fpg) {
-//     int fpgValue = int.parse(fpg);
-//     String condition = determineCondition(fpgValue);
-
-//     showDialog(
-//       context: context,
-//       builder: (BuildContext context) {
-//         return AlertDialog(
-//           title: Center(child: Text('ข้อมูลน้ำตาลในเลือด')),
-//           content: Text('FPG: $fpg Mg/dl\nสภาวะ: $condition'),
-//           actions: <Widget>[
-//             TextButton(
-//               onPressed: () {
-//                 Navigator.of(context).pop();
-//               },
-//               child: Text('OK'),
-//             ),
-//             TextButton(
-//               onPressed: () async {
-//                 if (_fpgController.text.isNotEmpty) {
-//                   try {
-//                     var res = await http.post(
-//                       Uri.parse(API.diabetes),
-//                       body: {
-//                         "fpg": _fpgController.text,
-//                         "descrip": condition,
-//                       },
-//                     );
-//                     var response = jsonDecode(res.body);
-//                     if (response["success"] == true) {
-//                       await showDialog(
-//                         context: context,
-//                         builder: (BuildContext context) {
-//                           return AlertDialog(
-//                             title: Center(child: Text("บันทึกข้อมูลสำเร็จ")),
-//                             actions: [
-//                               TextButton(
-//                                 onPressed: () {
-//                                   Navigator.of(context).pop();
-//                                 },
-//                                 child: Text(
-//                                   'OK',
-//                                   style: TextStyle(fontSize: 16),
-//                                 ),
-//                               ),
-//                             ],
-//                           );
-//                         },
-//                       );
-//                     } else {
-//                       print("พบข้อผิดพลาด: ${response["message"]}");
-//                     }
-//                   } catch (e) {
-//                     print(e);
-//                   }
-//                 } else {
-//                   _showSnackBar("กรุณากรอกข้อมูลให้ครบถ้วน");
-//                 }
-//               },
-//               child: Text('Save'),
-//             ),
-//           ],
-//         );
-//       },
-//     );
-//   }

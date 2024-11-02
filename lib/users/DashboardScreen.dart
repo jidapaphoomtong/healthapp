@@ -1,149 +1,159 @@
-// import "package:flutter/material.dart";
-
-// class DeshboardScreen extends StatefulWidget{
-//   @override
-//   State<DeshboardScreen> createState() => _DeshboardScreenState();
-// }
-
-// class _DeshboardScreenState extends State<DeshboardScreen> {
-
-  
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return SingleChildScrollView(
-//       child: Padding(
-//         padding: const EdgeInsets.all(30),
-//         child: Column(
-//           children: [
-//             SizedBox(height: 20,),
-//             Center(child: Text('Deshboard Data', style: TextStyle(fontSize: 22,fontWeight: FontWeight.bold),)),
-//             SizedBox(height: 10,),
-//             DataTable(
-//               columns:const<DataColumn> [
-//                 DataColumn(
-//                   label: Expanded(
-//                     child: Text('Name'),),),
-//                 DataColumn(
-//                   label: Expanded(
-//                     child: Text('Date'),),),
-//                 DataColumn(
-//                   label: Expanded(
-//                     child: Text('Value'),),),
-//               ], 
-//               rows: const<DataRow> [
-//                 DataRow(
-//                   cells: <DataCell>[
-//                     DataCell(Text('Presure'),),
-//                     DataCell(Text('12.12.2024'),),
-//                     DataCell(Text('ความดันปกติ'))
-//                   ],),
-//               ],
-//             ),
-//           ],
-//         ),
-//       ),
-//     );
-//   }
-//   //  @override
-//   //  Widget build(BuildContext context){
-//   //   return const Column(
-//   //     children: [
-//   //       const SizedBox(height: 18,),
-//   //       // const 
-//   //     ],
-//   //   );
-//   //  }
-
-// }
-
-import 'package:flutter/cupertino.dart';
+import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:health/users/card.dart';
+import 'package:http/http.dart' as http;
+import 'package:flutter/cupertino.dart';
 import 'package:fl_chart/fl_chart.dart';
-import 'package:health/users/line_chart.dart';
+import 'package:health/api_connection/api_connetion.dart';
+import 'dart:async'; // Add this for Timer
 
 class DashboardScreen extends StatefulWidget {
   @override
-  State<DashboardScreen> createState() => _DashboardScreenState();
+  _DashboardScreenState createState() => _DashboardScreenState();
 }
 
 class _DashboardScreenState extends State<DashboardScreen> {
-  @override
-  Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // Manually adding the AppBar as a widget
-          Container(
-            padding: const EdgeInsets.only(top: 40.0, left: 16.0, right: 16.0, bottom: 16.0),
-            color: Colors.blue,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  'Dashboard',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ],
-            ),
-          ),
+  List<dynamic> dashboardData = [];
+  Timer? _timer;
 
- Container(
-      height: MediaQuery.of(context).size.height * 0.11,
-      child: Column(
-        children: <Widget>[
-          Flexible(
-            child: Row(
-              children: <Widget>[
-                _buildStatCard('Pressure', '120/80', Colors.green),
-                _buildStatCard('BMI', '18.0', Colors.lightBlue),
-                _buildStatCard('Diabetes', '80 Mg/dl', Colors.purple),
-              ],
-            ),
-          ),
-        ],
-      ),
-    ),
-    // SizedBox(height: 18,),
-    // const LineChartCard(),
-    // SizedBox(height: 18,),
-    const BarGraphCard(),
-        ]
-      )
-    );
+  @override
+  void initState() {
+    super.initState();
+    fetchDashboardData();
+    _startAutoRefresh(); // Start the auto-refresh
   }
 
-  Expanded _buildStatCard(String title, String count, MaterialColor color) {
-    return Expanded(
-      child: Container(
-        margin: const EdgeInsets.all(8.0),
-        padding: const EdgeInsets.all(10.0),
-        decoration: BoxDecoration(
-          color: color,
-          borderRadius: BorderRadius.circular(10.0),
-        ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Text(
-              title,
-              style: const TextStyle(
-                color: Colors.white,
-                fontSize: 15.0,
-                fontWeight: FontWeight.w600,
+  @override
+  void dispose() {
+    _timer?.cancel(); // Cancel the timer when the widget is disposed
+    super.dispose();
+  }
+
+  // Fetch data every 30 seconds
+  void _startAutoRefresh() {
+    _timer = Timer.periodic(Duration(seconds: 30), (timer) {
+      fetchDashboardData(); // Fetch latest data
+    });
+  }
+
+ Future<void> fetchDashboardData() async {
+  try {
+    final response = await http.get(Uri.parse(API.dashboard)).timeout(Duration(seconds: 10));
+    if (response.statusCode == 200) {
+      setState(() {
+        // Ensure proper handling of null or missing values
+        dashboardData = json.decode(response.body).map((item) {
+          return {
+            'u_id': item['u_id'] ?? 0,
+            'bmi': item['bmi'] ?? 0.0,
+            'fpg': item['fpg'] ?? 0.0,
+            'sys': item['sys'] ?? 0.0,
+            'dia': item['dia'] ?? 0.0,
+            'date': item['date'] ?? 'N/A',
+          };
+        }).toList();
+      });
+    } else {
+      print('Failed to load data: ${response.statusCode}');
+    }
+  } catch (e) {
+    print('Error fetching data: $e');
+  }
+}
+
+
+
+@override
+Widget build(BuildContext context) {
+  return SingleChildScrollView(
+    child: Column(
+      children: [
+        Container(
+          padding: const EdgeInsets.only(top: 40.0, left: 16.0, right: 16.0, bottom: 16.0),
+          color: Colors.blue,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                'Dashboard',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
-            ),
+            ],
+          ),
+        ),
+        SizedBox(height: 8,),
+        
+        // Check if dashboardData is not empty and display the latest data
+// Check if dashboardData is not empty and display the latest data
+if (dashboardData.isNotEmpty)
+  Column(
+    children: [
+      Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          // Display latest pressure data (sys/dia)
+          _buildSummaryCard("Pressure", "${dashboardData.last['sys']}/${dashboardData.last['dia']}", Colors.green),
+          
+          // Display latest BMI data - ensure it's converted to double
+          _buildSummaryCard("BMI", _formatValueAsDouble(dashboardData.last['bmi']), Colors.lightBlue),
+          
+          // Display latest diabetes (FPG) data - ensure it's converted to double
+          _buildSummaryCard("Diabetes", _formatValueAsDouble(dashboardData.last['fpg']), Colors.purple),
+        ],
+      ),
+      SizedBox(height: 20),
+      _buildLineChartCard("Pressure", Colors.red, Colors.blue),
+      SizedBox(height: 20),
+      _buildBarChartCard("BMI", Colors.lightBlue),
+      SizedBox(height: 20),
+      _buildBarChartCard("Diabetes", Colors.purple),
+    ],
+  )
+else
+  // Show a message if no data is available
+  Center(
+    child: Text('No data available'),
+  ),
+      ],
+    ),
+  );
+}
+
+  String _formatValueAsDouble(dynamic value) {
+    try {
+      double parsedValue = double.tryParse(value.toString()) ?? 0.0;
+      return parsedValue.toStringAsFixed(2);
+    } catch (e) {
+      return "0.00";
+    }
+  }
+
+  Widget _buildSummaryCard(String label, String value, Color color) {
+    return Container(
+      width: 100,
+      height: 80,
+      decoration: BoxDecoration(
+        color: color,
+        borderRadius: BorderRadius.circular(10),
+      ),
+      child: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
             Text(
-              count,
-              style: const TextStyle(
+              label,
+              style: TextStyle(color: Colors.white, fontSize: 16),
+            ),
+            SizedBox(height: 5),
+            Text(
+              value,
+              style: TextStyle(
                 color: Colors.white,
-                fontSize: 20.0,
+                fontSize: 18,
                 fontWeight: FontWeight.bold,
               ),
             ),
@@ -152,178 +162,135 @@ class _DashboardScreenState extends State<DashboardScreen> {
       ),
     );
   }
-}
 
-class GraphModel {
-  final double x;
-  final double y;
-
-  const GraphModel({required this.x, required this.y});
-}
-
-class BarGraphModel {
-  final String label;
-  final Color color;
-  final List<GraphModel> graph;
-
-  const BarGraphModel(
-      {required this.label, required this.color, required this.graph});
-}
-
-class BarGraphData {
-  final data = [
-    const BarGraphModel(
-        label: "Pressure",
-        color: Colors.green,
-        graph: [
-          GraphModel(x: 0, y: 8),
-          GraphModel(x: 1, y: 10),
-          GraphModel(x: 2, y: 7),
-          GraphModel(x: 3, y: 4),
-          GraphModel(x: 4, y: 4),
-          GraphModel(x: 5, y: 6),
-        ]),
-    const BarGraphModel(label: "BMI", color: Colors.lightBlue, graph: [
-      GraphModel(x: 0, y: 8),
-      GraphModel(x: 1, y: 10),
-      GraphModel(x: 2, y: 9),
-      GraphModel(x: 3, y: 6),
-      GraphModel(x: 4, y: 6),
-      GraphModel(x: 5, y: 7),
-    ]),
-    const BarGraphModel(
-        label: "Diabetes",
-        color: Colors.purple,
-        graph: [
-          GraphModel(x: 0, y: 7),
-          GraphModel(x: 1, y: 10),
-          GraphModel(x: 2, y: 7),
-          GraphModel(x: 3, y: 4),
-          GraphModel(x: 4, y: 4),
-          GraphModel(x: 5, y: 10),
-        ]),
-  ];
-
-  final label = ['M', 'T', 'W', 'T', 'F', 'S'];
-}
-
-class CustomCard extends StatelessWidget {
-  final Widget child;
-  final Color? color;
-  final EdgeInsetsGeometry? padding;
-
-  const CustomCard({super.key, this.color, this.padding, required this.child});
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-        decoration: BoxDecoration(
-          borderRadius: const BorderRadius.all(
-            Radius.circular(8.0),
-          ),
-          color: CupertinoColors.lightBackgroundGray,
-        ),
-        child: Padding(
-          padding: padding ?? const EdgeInsets.all(12.0),
-          child: child,
-        ));
-  }
-}
-
-class BarGraphCard extends StatelessWidget {
-  const BarGraphCard({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    final barGraphData = BarGraphData();
-
-    return ListView.builder(
-      itemCount: barGraphData.data.length,
-      shrinkWrap: true,
-      // physics: const NeverScrollableScrollPhysics(), // ปิดการเลื่อนในแนวตั้ง
-      padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
-      itemBuilder: (context, index) {
-        return Container(
-          margin: const EdgeInsets.symmetric(vertical: 8),
-          child: CustomCard(
-            padding: const EdgeInsets.all(15),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Text(
-                    barGraphData.data[index].label,
-                    style: const TextStyle(
-                      fontSize: 16, // ขนาดตัวอักษรใหญ่ขึ้น
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 16),
-                Container(
-                  height: 95, // กำหนดความสูงของกราฟ
-                  child: BarChart(
-                    BarChartData(
-                      barGroups: _chartGroups(
-                        points: barGraphData.data[index].graph,
-                        color: barGraphData.data[index].color,
-                      ),
-                      borderData: FlBorderData(border: const Border()),
-                      gridData: FlGridData(show: false),
-                      titlesData: FlTitlesData(
-                        bottomTitles: AxisTitles(
-                          sideTitles: SideTitles(
-                            showTitles: true,
-                            getTitlesWidget: (value, meta) {
-                              return Padding(
-                                padding: const EdgeInsets.only(top: 5),
-                                child: Text(
-                                  barGraphData.label[value.toInt()],
-                                  style: const TextStyle(
-                                      fontSize: 12, // ขนาดตัวอักษรใหญ่ขึ้น
-                                      color: Colors.grey,
-                                      fontWeight: FontWeight.w500),
-                                ),
-                              );
-                            },
-                          ),
-                        ),
-                        leftTitles: AxisTitles(
-                          sideTitles: SideTitles(showTitles: false),
-                        ),
-                        topTitles: AxisTitles(
-                          sideTitles: SideTitles(showTitles: false),
-                        ),
-                        rightTitles: AxisTitles(
-                          sideTitles: SideTitles(showTitles: false),
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-              ],
+  Widget _buildBarChartCard(String label, Color color) {
+    return Card(
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+      child: Padding(
+        padding: const EdgeInsets.all(10.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              label,
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
-          ),
-        );
-      },
+            SizedBox(height: 10),
+            Container(
+              height: 150,
+              child: BarChart(
+                BarChartData(
+                  barGroups: _getBarGroups(color, label),
+                  borderData: FlBorderData(show: false),
+                  gridData: FlGridData(show: false),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
-}
 
-
-  List<BarChartGroupData> _chartGroups(
-      {required List<GraphModel> points, required Color color}) {
-    return points
-        .map((point) => BarChartGroupData(x: point.x.toInt(), barRods: [
-              BarChartRodData(
-                toY: point.y,
-                width: 12,
-                color: color.withOpacity(point.y.toInt() > 4 ? 1 : 0.4),
-                borderRadius: const BorderRadius.only(
-                  topLeft: Radius.circular(3.0),
-                  topRight: Radius.circular(3.0),
+  Widget _buildLineChartCard(String label, Color sysColor, Color diaColor) {
+    return Card(
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+      child: Padding(
+        padding: const EdgeInsets.all(10.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              label,
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            ),
+            SizedBox(height: 10),
+            Container(
+              height: 150,
+              child: LineChart(
+                LineChartData(
+                  lineBarsData: [
+                  // SYS Line
+                  LineChartBarData(
+                    spots: List.generate(dashboardData.length, (index) {
+                      final sysValue = dashboardData[index]['sys'] is double
+                          ? dashboardData[index]['sys']
+                          : double.tryParse(dashboardData[index]['sys'].toString()) ?? 0.0;
+                      return FlSpot(index.toDouble(), sysValue);
+                    }),
+                    isCurved: true,
+                    color: Colors.red, // Color for SYS line
+                    barWidth: 2,
+                    belowBarData: BarAreaData(show: false),
+                  ),
+                  // DIA Line
+                  LineChartBarData(
+                    spots: List.generate(dashboardData.length, (index) {
+                      final diaValue = dashboardData[index]['dia'] is double
+                          ? dashboardData[index]['dia']
+                          : double.tryParse(dashboardData[index]['dia'].toString()) ?? 0.0;
+                      return FlSpot(index.toDouble(), diaValue);
+                    }),
+                    isCurved: true,
+                    color: Colors.blue, // Color for DIA line
+                    barWidth: 2,
+                    belowBarData: BarAreaData(show: false),
+                  ),
+                ],
+                  borderData: FlBorderData(show: false),
+                  gridData: FlGridData(show: false),
+                  titlesData: FlTitlesData(show: true),
                 ),
-              )
-            ]))
-        .toList();
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
   }
+
+  LineChartBarData _getLineData(List<Map<String, dynamic>> healthData, String type, Color color,) {
+    List<FlSpot> spots = [];
+    
+    for (int i = 0; i < healthData.length; i++) {
+      double value = healthData[i][type] is double 
+          ? healthData[i][type] 
+          : double.tryParse(healthData[i][type].toString()) ?? 0.0;
+      spots.add(FlSpot(i.toDouble(), value));
+    }
+    
+    return LineChartBarData(
+      spots: spots,
+      isCurved: true,
+      color: Colors.orange,
+      dotData: FlDotData(show: false),
+      barWidth: 3,
+    );
+  }
+
+  List<BarChartGroupData> _getBarGroups(Color color, String label) {
+    List<double> dataPoints = [];
+
+    for (var data in dashboardData) {
+      if (label == "BMI") {
+        dataPoints.add(data['bmi'] is double ? data['bmi'] : double.tryParse(data['bmi'].toString()) ?? 0.0);
+      } else if (label == "Diabetes") {
+        dataPoints.add(data['fpg'] is double ? data['fpg'] : double.tryParse(data['fpg'].toString()) ?? 0.0);
+      }
+    }
+
+    return List.generate(dataPoints.length, (index) {
+      return BarChartGroupData(
+        x: index,
+        barRods: [
+          BarChartRodData(
+            toY: dataPoints[index],
+            color: color,
+            width: 15,
+            borderRadius: BorderRadius.circular(5),
+          ),
+        ],
+      );
+    });
+  }
+}

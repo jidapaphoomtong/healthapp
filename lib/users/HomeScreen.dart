@@ -23,41 +23,17 @@ class _HomeScreenState extends State<HomeScreen> {
   ];
 
   final hospital = 'https://med.msu.ac.th/suddhavej/';
-  final medicien = 'https://www.facebook.com/UniPharmMSU';
+  final medicine = 'https://www.facebook.com/UniPharmMSU';
   final healthS = 'https://www.thaihealth.or.th/category/%E0%B8%82%E0%B9%88%E0%B8%B2%E0%B8%A7%E0%B8%AA%E0%B8%A3%E0%B9%89%E0%B8%B2%E0%B8%87%E0%B8%AA%E0%B8%B8%E0%B8%82/%E0%B8%82%E0%B9%88%E0%B8%B2%E0%B8%A7%E0%B8%AA%E0%B8%B8%E0%B8%82%E0%B8%A0%E0%B8%B2%E0%B8%9E/';
   final group = 'https://www.facebook.com/profile.php?id=100063732813635';
   final emergency = 'https://www.facebook.com/rcpmsu';
-  
+  final support = 'https://www.facebook.com/MahasarakhamUniversity.MSU';
+
   Future<void> _launchURL(String url) async {
     final Uri uri = Uri.parse(url);
-    if (!await launchUrl(uri)) {
+    if (!await launchUrl(uri, mode: LaunchMode.externalApplication)) {
       throw 'Could not launch $url';
     }
-  }
-
-  String name = '';
-
-  Future<void> fetchName() async {
-    String url = "http://10.160.40.13/myapp/get_name.php?user_id=1"; // Update user_id as needed
-    try {
-      var res = await http.get(Uri.parse(url));
-      var response = jsonDecode(res.body);
-      if (response['success'] == true) {
-        setState(() {
-          name = response['name'];
-        });
-      } else {
-        print("Error: ${response['message']}");
-      }
-    } catch (e) {
-      print("Exception: $e");
-    }
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    fetchName();
   }
 
   @override
@@ -71,18 +47,14 @@ class _HomeScreenState extends State<HomeScreen> {
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 15),
               child: Row(
-                // mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    "Hello Tester",
+                    "Welcome to INNOHEALTH",
                     style: TextStyle(
-                      fontSize: 30,
+                      fontSize: 26,
                       fontWeight: FontWeight.w500,
                     ),
                   ),
-                  // SizedBox(width: 10,),
-                  // Image.asset('images/4042356.png',width: 35,)
-                  // Icon(Icons.circle, weight: 35,),
                 ],
               ),
             ),
@@ -100,7 +72,7 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
               items: imgList.map((item) => Container(
                 child: Center(
-                  child: Image.asset(item, fit: BoxFit.cover, ),
+                  child: Image.asset(item, fit: BoxFit.cover),
                 ),
               )).toList(),
             ),
@@ -120,7 +92,7 @@ class _HomeScreenState extends State<HomeScreen> {
             Column(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                _buildHealthCheckButton(context, "Pressure",PressureScreen() ),
+                _buildHealthCheckButton(context, "Pressure", PressureScreen()),
                 SizedBox(height: 10),
                 _buildHealthCheckButton(context, "BMI", BMIScreen()),
                 SizedBox(height: 10),
@@ -141,49 +113,49 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             Row(
               children: [
-                SizedBox(width: 30,),
+                SizedBox(width: 30),
                 Column(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     IconButton(
-                      onPressed: (){
-                        _launchURL(medicien);
-                      }, 
+                      onPressed: () {
+                        _launchURL(medicine);
+                      },
                       icon: Icon(Icons.medical_information),
                       iconSize: 40,
                       color: Color.fromARGB(255, 14, 34, 149),
                     ),
                     Text('Medical'),
-                    SizedBox(height: 18,),
+                    SizedBox(height: 18),
                     IconButton(
-                      onPressed: (){
-                         _launchURL(healthS);
-                      }, 
-                      icon: Icon( Icons.health_and_safety),
+                      onPressed: () {
+                        _launchURL(healthS);
+                      },
+                      icon: Icon(Icons.health_and_safety),
                       iconSize: 40,
                       color: Color.fromARGB(255, 14, 34, 149),
                     ),
-                    Text('Health and Safety'),
+                    Text('Health & Safety'),
                   ],
                 ),
-                SizedBox(width: 40,),
+                SizedBox(width: 40),
                 Column(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     IconButton(
-                      onPressed: (){
-                         _launchURL(hospital);
-                      }, 
-                      icon: Icon(Icons.home_work),
+                      onPressed: () {
+                        _launchURL(hospital);
+                      },
+                      icon: Icon(Icons.local_hospital),
                       iconSize: 40,
                       color: Color.fromARGB(255, 14, 34, 149),
                     ),
                     Text('Hospital'),
-                    SizedBox(height: 18,),
-                     IconButton(
-                      onPressed: (){
-                         _launchURL(group);
-                      }, 
+                    SizedBox(height: 18),
+                    IconButton(
+                      onPressed: () {
+                        _launchURL(group);
+                      },
                       icon: Icon(Icons.group),
                       iconSize: 40,
                       color: Color.fromARGB(255, 14, 34, 149),
@@ -191,14 +163,14 @@ class _HomeScreenState extends State<HomeScreen> {
                     Text('Group'),
                   ],
                 ),
-                SizedBox(width: 45,),
+                SizedBox(width: 45),
                 Column(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     IconButton(
-                      onPressed: (){
+                      onPressed: () {
                         _launchURL(emergency);
-                      }, 
+                      },
                       icon: Icon(IconData(0xE9A7,
   fontFamily: 'HumanitarianIcons',
   fontPackage: 'humanitarian_icons',
@@ -208,12 +180,12 @@ class _HomeScreenState extends State<HomeScreen> {
                       color: Color.fromARGB(255, 14, 34, 149),
                     ),
                     Text('Emergency'),
-                    SizedBox(height: 18,),
-                     IconButton(
-                      onPressed: (){
-                        // Navigator.of(context).pop();
+                    SizedBox(height: 18),
+                    IconButton(
+                      onPressed: () {
+                        _launchURL(support);
                       },
-                      icon: Icon( Icons.support_agent),
+                      icon: Icon(Icons.support_agent),
                       iconSize: 40,
                       color: Color.fromARGB(255, 14, 34, 149),
                     ),
@@ -241,7 +213,11 @@ class _HomeScreenState extends State<HomeScreen> {
           child: Center(
             child: Text(
               text,
-              style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold),
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+              ),
             ),
           ),
         ),

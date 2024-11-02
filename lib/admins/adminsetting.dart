@@ -1,66 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:health/api_connection/api_connetion.dart';
-import 'package:health/users/login_screen.dart';
+import 'package:health/admins/alogin.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_settings_screens/flutter_settings_screens.dart';
-import 'package:http/http.dart' as http;
 
-class SettingScreen extends StatelessWidget {
+class SettingsPage extends StatelessWidget {
   Future<void> _setLanguage(String lang) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setString('language', lang);
   }
-    final TextEditingController _reportController = TextEditingController();
-    final TextEditingController _feedbackController = TextEditingController();
-
-  Future<void> submitReport() async {
-    final reportProblem = _reportController.text;
-
-    // ตรวจสอบให้แน่ใจว่าผู้ใช้ได้กรอกข้อมูลแล้ว
-    if (reportProblem.isNotEmpty) {
-      // แทนที่ด้วย URL ของ API สำหรับการบันทึกข้อมูล
-      final url = Uri.parse(API.submit_report); 
-      
-      // ส่งข้อมูลไปยัง API โดย POST
-      final response = await http.post(
-        url,
-        body: {'report_problem': reportProblem},
-      );
-
-      // ตรวจสอบว่า request สำเร็จหรือไม่
-      if (response.statusCode == 200) {
-        print('Report submitted successfully');
-         SnackBar(content: Text('Report submitted successfully'));
-      } else {
-        print('Failed to submit report : ${response.body}');
-      }
-    }
-  }
-
-   Future<void> submitFeedback() async {
-    final feedback = _feedbackController.text;
-
-    // ตรวจสอบให้แน่ใจว่าผู้ใช้ได้กรอกข้อมูลแล้ว
-    if (feedback.isNotEmpty) {
-      // URL ของ API สำหรับการบันทึก Feedback
-      final url = Uri.parse(API.submit_feedback); 
-
-      // ส่งข้อมูลไปยัง API โดยใช้ POST
-      final response = await http.post(
-        url,
-        body: {'feedback': feedback},
-      );
-
-      // ตรวจสอบว่า request สำเร็จหรือไม่
-      if (response.statusCode == 200) {
-        SnackBar(content: Text('Feedback submitted successfully'));
-        print('Feedback submitted successfully');
-      } else {
-        print('Failed to submit feedback: ${response.body}');
-      }
-    }
-  }
-
 
   @override
   Widget build(BuildContext context) {
@@ -116,7 +63,7 @@ class SettingScreen extends StatelessWidget {
           prefs.clear(); // Clear all preferences
         });
         Navigator.pushReplacement(context, MaterialPageRoute(
-          builder: (context) => LoginScreen(),
+          builder: (context) => ALoginScreen(),
         ));
       },
     );
@@ -163,21 +110,20 @@ class SettingScreen extends StatelessWidget {
       subtitle: '',
       leading: Icon(Icons.bug_report),
       onTap: () {
+        // Implement report issue logic
         showDialog(
           context: context,
           builder: (BuildContext context) {
             return AlertDialog(
               title: Text("Report a Problem"),
               content: TextField(
-                controller: _reportController, // เพิ่ม controller
                 decoration: InputDecoration(hintText: "Describe the issue"),
                 maxLines: 5,
               ),
               actions: [
                 TextButton(
                   onPressed: () {
-                    // เรียกฟังก์ชัน submitReport เพื่อบันทึกข้อมูล
-                    submitReport();
+                    // Here you can handle the report submission
                     Navigator.of(context).pop();
                   },
                   child: Text("Submit"),
@@ -195,26 +141,27 @@ class SettingScreen extends StatelessWidget {
       },
     );
   }
-   Widget buildSendFeedback(BuildContext context) {
+
+  Widget buildSendFeedback(BuildContext context) {
     return SimpleSettingsTile(
       title: 'Send Feedback',
       subtitle: '',
       leading: Icon(Icons.thumb_up),
       onTap: () {
+        // Implement feedback sending logic
         showDialog(
           context: context,
           builder: (BuildContext context) {
             return AlertDialog(
               title: Text("Send Feedback"),
               content: TextField(
-                controller: _feedbackController, // เพิ่ม controller
                 decoration: InputDecoration(hintText: "Your feedback"),
                 maxLines: 5,
               ),
               actions: [
                 TextButton(
                   onPressed: () {
-                    submitFeedback(); // เรียกฟังก์ชัน submitFeedback เพื่อบันทึกข้อมูล
+                    // Here you can handle feedback submission
                     Navigator.of(context).pop();
                   },
                   child: Text("Submit"),
@@ -233,4 +180,3 @@ class SettingScreen extends StatelessWidget {
     );
   }
 }
-

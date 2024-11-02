@@ -17,31 +17,6 @@ class PressureAdvScreen extends StatelessWidget {
     required this.condition,
   });
 
-  Future<void> _savePressureData() async {
-    try {
-      var response = await http.post(
-        Uri.parse(API.pressure),
-        headers: <String, String>{
-          'Content-Type': 'application/json; charset=UTF-8',
-        },
-        body: jsonEncode(<String, dynamic>{
-          'sys': sys,
-          'dia': dia,
-          'pul': pul,
-          'cond': condition, // Ensure this matches the server field name
-        }),
-      );
-      if (response.statusCode == 200) {
-        print('Data saved successfully');
-      } else {
-        print('Failed to save data. Status code: ${response.statusCode}');
-        print('Response body: ${response.body}'); // Log response body for debugging
-      }
-    } catch (e) {
-      print('Error saving data: $e');
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -89,16 +64,80 @@ class PressureAdvScreen extends StatelessWidget {
                       onPressed: () {
                         Navigator.pop(context);
                       },
-                      child: const Text("ประเมินผลอีกครั้ง"),
+                      child: const Text("Re-calculate"),
                     ),
                     const SizedBox(width: 20),
-                    ElevatedButton(
-                      onPressed: () async {
-                        await _savePressureData(); // Ensure data is saved before navigating back
-                        Navigator.pop(context);
-                      },
-                      child: const Text("บันทึกข้อมูล"),
-                    ),
+                   ElevatedButton(
+  onPressed: () async {
+  try {
+    var res = await http.post(
+      Uri.parse(API.pressure),
+      body: {
+        'sys': sys.toString(),   // Convert int to String
+        'dia': dia.toString(),   // Convert int to String
+        'pul': pul.toString(),   // Convert int to String
+        'cond': condition,       // This is already a String
+      },
+    );
+    var response = jsonDecode(res.body);
+    if (response["success"] == true) {
+      await showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Center(child: Text("Save complete")),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: Text('OK', style: TextStyle(fontSize: 16)),
+              ),
+            ],
+          );
+        },
+      );
+    } else {
+      await showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Center(child: Text("Error")),
+            content: Text(response["message"]),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: Text('OK', style: TextStyle(fontSize: 16)),
+              ),
+            ],
+          );
+        },
+      );
+    }
+  } catch (e) {
+    await showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Center(child: Text("Error")),
+          content: Text(e.toString()),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text('OK', style: TextStyle(fontSize: 16)),
+            ),
+          ],
+        );
+      },
+    );
+  }
+},
+  child: const Text("Save"),
+),
                   ],
                 ),
               ),

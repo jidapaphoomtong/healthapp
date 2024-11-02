@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:health/api_connection/api_connetion.dart';
-import 'package:health/healthcheck/condition_diabetes.dart';
 import 'package:health/healthcheck/diabetes_advice.dart';
 import 'package:http/http.dart' as http;
 import 'package:swipeable_button_view/swipeable_button_view.dart';
@@ -33,6 +32,8 @@ class _DiabetesScreenState extends State<DiabetesScreen> {
         ),
       ),
     );
+
+    _fpgController.clear();
   }
 
   
@@ -77,7 +78,7 @@ class _DiabetesScreenState extends State<DiabetesScreen> {
               isFinished: _isFinished,
               onFinish: () {
                 if (_fpgController.text.isEmpty) {
-                  _showSnackBar("กรุณากรอกข้อมูลให้ครบถ้วน");
+                  _showSnackBar("Please fill in all information completely");
                   setState(() {
                     _isFinished = false;
                   });
@@ -101,11 +102,22 @@ class _DiabetesScreenState extends State<DiabetesScreen> {
                 Icons.arrow_forward_ios_rounded,
                 color: Colors.black,
               ),
-              buttonText: "ประเมินผลน้ำตาล",
+              buttonText: "Calculate",
             ),
           ],
         ),
       ),
     );
+  }
+    String determineCondition(int fpg) {
+    if (fpg > 126) {
+      return 'มีความเสี่ยงเป็นโรคเบาหวาน';
+    } else if (fpg >= 100 && fpg <= 125) {
+      return 'มีภาวะเสี่ยงหรือเบาหวานแฝง';
+    } else if ((fpg >= 70 && fpg <= 100)) {
+      return 'ภาวะปกติ';
+    } else {
+      return 'ไม่สามารถประมวลผลได้';
+    }
   }
 }

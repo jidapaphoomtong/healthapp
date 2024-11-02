@@ -5,10 +5,6 @@ import 'package:get/get.dart';
 import 'package:health/admins/asignup.dart';
 import 'package:health/api_connection/api_connetion.dart';
 import 'package:health/users/login_screen.dart';
-// import 'package:health/api_connection/api_connetion.dart';
-// import 'package:health/users/model/user.dart';
-import 'package:health/users/signup_screen.dart';
-// import 'package:health/users/uerPreferences/user_preferences.dart';
 import 'package:health/widget/navbar.dart';
 import 'package:http/http.dart' as http;
 
@@ -40,13 +36,13 @@ class _ALoginScreenState extends State<ALoginScreen>{
       );
       var response = jsonDecode(res.body);
       if (response["success"] == true) {
-        Navigator.push(context, MaterialPageRoute(builder: (context) => NavBarRoots()));
+        Navigator.push(context, MaterialPageRoute(builder: (context) => NavBarRoots(role: 'admin')));
       } else {
         await showDialog(
           context: context,
           builder: (BuildContext context) {
             return AlertDialog(
-              title: const Center(child: const Text("ไม่สามารถเข้าสู่ระบบได้ \nโปรดตรวจสอบรหัสหรืออีเมล",
+              title: const Center(child: const Text("Can not log in \nPlease check your email or password",
               style: TextStyle(fontSize: 18),)),
               actions: [
                 TextButton(
@@ -68,7 +64,7 @@ class _ALoginScreenState extends State<ALoginScreen>{
           context: context,
           builder: (BuildContext context) {
             return AlertDialog(
-              title: const Center(child: Text("กรุณากรอกข้อมูลให้ครบถ้วน",
+              title: const Center(child: Text("Please fill in all information completely",
               style: TextStyle(fontSize: 18),)),
               actions: [
                 TextButton(
@@ -254,29 +250,29 @@ class _ALoginScreenState extends State<ALoginScreen>{
                             ), 
                             ),
                             const SizedBox(height: 18,),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                const Text("Don't have Account?"),
-                                TextButton(
-                                  onPressed: (){
-                                     Navigator.push(context, MaterialPageRoute(
-                                      builder: (context)=> const AdminScreen()
-                                      )
-                                    );
-                                  }, 
-                                  child: const Text("SignUp here",
-                                    style: TextStyle(color: Colors.green),
-                                  ),
-                                ),
-                              ],
-                            ),
-                            const Text("or",
-                            style: TextStyle(
-                              color: const Color.fromARGB(255, 4, 51, 89),
-                              fontSize: 16,  
-                              ),
-                            ),
+                            // Row(
+                            //   mainAxisAlignment: MainAxisAlignment.center,
+                            //   children: [
+                            //     const Text("Don't have Account?"),
+                            //     TextButton(
+                            //       onPressed: (){
+                            //          Navigator.push(context, MaterialPageRoute(
+                            //           builder: (context)=> const AdminScreen()
+                            //           )
+                            //         );
+                            //       }, 
+                            //       child: const Text("SignUp here",
+                            //         style: TextStyle(color: Colors.green),
+                            //       ),
+                            //     ),
+                            //   ],
+                            // ),
+                            // const Text("or",
+                            // style: TextStyle(
+                            //   color: const Color.fromARGB(255, 4, 51, 89),
+                            //   fontSize: 16,  
+                            //   ),
+                            // ),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [

@@ -215,7 +215,7 @@ class _SignUpScreenState extends State<SignUpScreen>{
                     onPressed: () {
                       Navigator.push(
                         context, MaterialPageRoute(
-                          builder: (context) => NavBarRoots()));
+                          builder: (context) => NavBarRoots(role: 'user')));
                     },
                     child: Text(
                       'SKIP',
